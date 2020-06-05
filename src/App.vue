@@ -1,28 +1,43 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="headerNav">
+      <headNav></headNav>
+    </div>
+    <div class="centerContain">
+      <find></find>
+    </div>
+    <div class="foot"></div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import headNav from "./components/headNav";
+import find from "./common/find";
+import centerNav from "./components/centerNav";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    headNav: headNav,
+    find,
+    centerNav
   }
-}
+};
 </script>
 
 <style>
+@import "./assets/css/normalize.css";
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  width: 100%;
+}
+.headerNav{
+  width: 100%;
+}
+.centerContain{
+  width: 80%;
+  margin: auto;
+}
+.foot{
+  width: 100%;
 }
 </style>
