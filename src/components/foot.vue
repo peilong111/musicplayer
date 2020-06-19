@@ -37,7 +37,9 @@
 // 网络请求，根据 window.playMuscId查找音乐
 
 export default {
-  props: {},
+  props: {
+   
+  },
   data() {
     return {
       musicSrc: "",
@@ -76,13 +78,11 @@ export default {
     play() {
       this.isplay = true;
       this.$refs.audio.play();
-      this.$root.$emit("pausePlay", this.isplay,this.isplayId);
     },
     // 暂停
     pause() {
       this.isplay = false;
       this.$refs.audio.pause();
-      this.$root.$emit("pausePlay", this.isplay,this.isplayId);
     },
     // 设置音频总时间
     setTime() {
@@ -105,10 +105,7 @@ export default {
     },
 
     formatTooltip(val) {
-      // console.log(val / 100);
-      // this.$refs.audio.pause();
-      // this.$refs.audio.currentTime =(val/100) * parseInt(this.$refs.audio.duration);
-      // this.$refs.audio.play();
+      
     }
   },
   components: {},

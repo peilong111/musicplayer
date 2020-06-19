@@ -3,8 +3,8 @@
 <template>
     <div id="pertion">
         <div class="top">
-            <img src="../assets/img/head.png" alt="" id="headImg">
-            <p id="name">微凉</p>
+            <img :src="userMes.headSrc" alt="" id="headImg">
+            <p id="name">{{userMes.name}}</p>
             <div class="btn"><el-button plain @click="my">我的动态</el-button></div>
         </div>
         <div class="friendList">
@@ -25,14 +25,15 @@ export default {
     },
     data() {
         return {
-            friendList: this.fList
+            friendList: this.fList,
+            userMes: {}
         };
     },
     computed: {
 
     },
     created() {
-
+        this.userMes = JSON.parse(sessionStorage.getItem("userMmes"))
     },
     mounted() {
 
@@ -101,6 +102,7 @@ li{
 }
 .friendList ul li:hover{
     background-color: rgb(214, 249, 253);
+    cursor: default
 }
 ul li:nth-of-type(odd){ background:#ebd4bb;}/*奇数行 */
 ul li:nth-of-type(even){ background:#ddadbf;}/*偶数行 */

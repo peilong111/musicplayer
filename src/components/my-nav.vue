@@ -95,5 +95,6 @@ ul li:nth-of-type(odd){ background:#a0d2df;}/*奇数行 */
 ul li:nth-of-type(even){ background:#ddd7c1;}/*偶数行 */
 ul li:hover{
   background: rgb(130, 145, 173);
+  cursor: default
 }
 </style>

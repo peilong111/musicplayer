@@ -5,7 +5,7 @@
     </div>
     <div class="centerContain">
       <find v-if="pageIndex===1"></find>
-      <my v-if="pageIndex===2 && isLogin"></my>
+      <my v-if="pageIndex===2 && isLogin" :lis="list"></my>
       <friend v-if="pageIndex===3 && isLogin"></friend>
       <message v-if="pageIndex===4 && isLogin"></message>
       <unLogin v-if="pageIndex!=1 && !isLogin"></unLogin>
@@ -26,13 +26,42 @@ import foot from "./components/foot";
 import unLogin from "./components/unLogin";
 import Vue from "vue";
 import { setCookie, getCookie, checkCookie } from "./assets/js/cookie";
+import { request } from "./request/http";
 
 export default {
   name: "App",
-  created(){
-    console.log('id',getCookie("userId"))
-    if(getCookie("userId").length>0) this.isLogin = true
-    console.log('login?',this.isLogin)
+  created() {
+    if (getCookie("userId").length > 0) {
+      this.isLogin = true;
+      // 个人歌单列表
+      request({
+          url: "/my/getMyMusicList",
+          params: {
+              id: getCookie('userId')
+          }
+        }).then(res => {
+            if (res.data.datus == 1) {
+              this.list = res.data.data;
+              sessionStorage.setItem("userMusicList",JSON.stringify(this.list))
+            }
+          }).catch(err => {
+            console.log(err);
+          });
+      // 请求用户信息
+      request({
+          url: "/getUserMes",
+          params: {
+              userId: getCookie('userId')
+          }
+        }).then(res => {
+            if (res.data.datus == 1) {
+              sessionStorage.setItem("userMmes",JSON.stringify(res.data.data))
+            }
+          }).catch(err => {
+            console.log(err);
+          });
+    }
+     
   },
   components: {
     headNav: headNav,
@@ -47,6 +76,8 @@ export default {
     return {
       pageIndex: 1,
       isLogin: false,
+      musicList: [],
+      list:[],
       // 中转站
       Bus: new Vue({})
     };
@@ -55,11 +86,25 @@ export default {
     changePage(pageIndex) {
       if (pageIndex > 0 && pageIndex < 5) this.pageIndex = pageIndex;
     },
-    login(isLogin){
-      this.isLogin = isLogin
+    login(isLogin) {
+      this.isLogin = isLogin;
+      request({
+          url: "/my/getMyMusicList",
+          params: {
+              id: getCookie('userId')
+          }
+        }).then(res => {
+            if (res.data.datus == 1) {
+              this.list = res.data.data;
+              sessionStorage.setItem("userMusicList",JSON.stringify(this.list))
+            }
+          }).catch(err => {
+            console.log(err);
+          });
     },
-    unLogin(){
-      this.isLogin = false
+    unLogin() {
+      this.isLogin = false;
+      
     }
   }
 };
@@ -87,7 +132,7 @@ export default {
   opacity: 0.1;
   background-color: rgb(206, 226, 248);
 }
-.foot:hover{
+.foot:hover {
   opacity: 0.8;
 }
 </style>

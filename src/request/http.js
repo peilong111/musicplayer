@@ -18,13 +18,4 @@
                 reject(err)
             })
     })
-
-
-
-    //  //
-    //  const axios1 = axios.create({
-    //      baseURL: '192.168.0.103:3000',
-    //      timeout: 5000
-    //  })
-    //  return axios1(config)
  }

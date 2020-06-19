@@ -117,12 +117,14 @@ export default {
         res => {
           if(res.data.datus == 1){
             
-            this.$emit('login',true)
+            
             this.isLogin = true
             this.currentUser = res.data.data
             // this.headSrc = res.data.data.headSrc
             setCookie('userHeadSrc',res.data.data.headSrc,7)
             setCookie('userId',res.data.data.id,7)
+            sessionStorage.setItem("userMmes",JSON.stringify(res.data.data))
+            this.$emit('login',true)
           }else{
             alert('账号或者密码错误')
           }
@@ -186,6 +188,7 @@ li {
 }
 #navul li:hover{
   background: rgb(206, 205, 205);
+  cursor: pointer
 }
 li img{
   height: 50px;

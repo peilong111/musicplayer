@@ -7,7 +7,7 @@
       <Dynamic :mic="Dynamic" :key="timer"></Dynamic>
     </div>
     <div class="pertion">
-      <pertion :fList="friendList"></pertion>
+      <pertion :fList="friendList" :key="timer1"></pertion>
     </div>
   </div>
 </template>
@@ -18,7 +18,6 @@ import Dynamic from "../components/Dynamic";
 import pertion from "../components/pertion";
 import {request} from "../request/http"
 import {setCookie,getCookie,checkCookie} from '../assets/js/cookie'
-// 网络请求 请求好友列表，请求好友的动态
 
 export default {
   props: {},
@@ -26,24 +25,13 @@ export default {
     return {
       Dynamic: [],
       timer: 0,
-      friendList: [
-        {
-          id: 1,
-          name: "用户已"
-        },
-        {
-          id: 2,
-          name: "用户已"
-        },
-        {
-          id: 3,
-          name: "用户已"
-        }
-      ]
+      timer1: 0,
+      friendList: []
     };
   },
   computed: {},
   created() {
+    // 获取分享信息
     request({
           url: "/friend/getShare",
           params: {
@@ -51,10 +39,26 @@ export default {
           }
         }).then(res => {
           if (res.data.datus == 1) {
-            console.log("得到数据", res.data.data);
+            // console.log("得到数据", res.data.data);
             
             this.Dynamic = res.data.data;
             this.timer = new Date().getTime()
+            // console.log("用户id",getCookie('userId'))
+          }
+        }).catch(err => {
+            console.log(err);
+          });
+    //获取好友列表 
+    request({
+          url: "/friend/getFriendList",
+          params: {
+              userId: getCookie('userId')
+          }
+        }).then(res => {
+          if (res.data.datus == 1) {
+            
+            this.friendList = res.data.data;
+            this.timer1 = new Date().getTime()
             // console.log("用户id",getCookie('userId'))
           }
         }).catch(err => {

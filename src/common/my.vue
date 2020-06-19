@@ -20,56 +20,54 @@ import {setCookie,getCookie,checkCookie} from '../assets/js/cookie'
 
 
 export default {
-  props: {},
+  props: {
+    lis:{
+      type:Array
+    }
+  },
   data() {
     return {
       currentList: 0,
       musicMes: [],
-      list: [],
+      list: this.lis,
       timer: 0,
       timer0: 0
     };
   },
   computed: {},
   created() {
-    // 网络请求，请求默认歌单 请求歌单列表
-    // console.log(getCookie('userId'))
-    request({
-        url: "/my/getMyMusicList",
-        params: {
-            id: getCookie('userId')
-        }
-      }).then(res => {
-          if (res.data.datus == 1) {
-            // console.log("得到数据", res.data.data);
-            this.list = res.data.data;
-            this.timer0 = new Date().getTime()
-            // console.log("用户id",getCookie('userId'))
-          }
-        }).catch(err => {
-          console.log(err);
-        });
+    
   },
   mounted() {},
   watch: {},
   methods: {
     selectList(item) {
       // 网络请求，根据歌单id数组请求音乐
-      request({
+      if(item.musicId.length==0){
+        this.$message({
+                message: '该歌单中没有歌曲',
+                center: true,
+                type: 'warning'
+              });
+      }else{
+        request({
           url: "/my/getMusicList",
           params: {
               musicId: item.musicId
           }
         }).then(res => {
           if (res.data.datus == 1) {
-            // console.log("得到数据", res.data.data);
-            this.timer = new Date().getTime()
-            this.musicMes = res.data.data;
-            // console.log("用户id",getCookie('userId'))
+            // console.log(res.data.data)
+            if(res.data.data.length>0){
+              this.timer = new Date().getTime()
+              this.musicMes = res.data.data;
+            }
           }
         }).catch(err => {
             console.log(err);
           });
+      }
+      
     },
     newList(listName){
       // 网络请求，新建歌单

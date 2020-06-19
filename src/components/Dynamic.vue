@@ -99,6 +99,7 @@ export default {
 }
 #sharecontain:hover {
   background-color: rgb(212, 234, 252);
+  cursor: pointer
 }
 .top {
   width: 100%;
@@ -152,5 +153,8 @@ export default {
   /* width: 33%; */
   float: right;
   margin: auto;
+}
+i:hover{
+  cursor: pointer
 }
 </style>

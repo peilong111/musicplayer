@@ -35,6 +35,8 @@ export default {
             
             console.log("用户注销");
             this.$root.$emit('unLogin')
+            // 清缓存
+            sessionStorage.clear()
         },
         test(){
             console.log(getCookie('userId'))
