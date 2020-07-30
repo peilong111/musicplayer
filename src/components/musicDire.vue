@@ -46,6 +46,7 @@ export default {
   height: 40px;
   line-height: 40px;
   background-color: rgb(243, 239, 239);
+  border-top: brown 2px solid;
   /* text-align: center; */
 }
 </style>

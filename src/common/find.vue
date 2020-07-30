@@ -2,8 +2,14 @@
   <div class="find">
     <!-- v-if:等待请求数据返回后再加载子组件 -->
     <carousel v-bind:cars="carousel" v-if="carousel.length>0"></carousel>
-    <centerNav @selectType="selectType"></centerNav>
-    <musicDire></musicDire>
+    <findList></findList> 
+    
+    
+    <div class="music">
+      <centerNav @selectType="selectType"></centerNav>
+      <musicDire></musicDire>
+      
+    </div>
     <music :mes="musicMes" v-if="musicMes.length>0" :key="timer"></music>
   </div>
 </template>
@@ -13,6 +19,7 @@ import carousel from "../components/carousel";
 import centerNav from "../components/centerNav";
 import musicDire from "../components/musicDire";
 import music from "../components/music";
+import findList from "../components/findList"
 import { request } from "../request/http.js";
 
 export default {
@@ -45,7 +52,7 @@ export default {
     request({
       url: "/find/music/type",
       params: {
-        type: "tuijian"
+        type: 1
       }
     })
       .then(res => {
@@ -66,22 +73,22 @@ export default {
       // 根据类型，网络请求歌单
       switch (parseInt(index)) {
         case 1: 
-          this.type = "tuijian";
+          this.type = 1;
           break;
         case 2: 
-          this.type = "huayu";
+          this.type = 2;
           break;
         case 3:
-          this.type = "liuxing";
+          this.type = 3;
           break;
         case 4:
-          this.type = "yaogun";
+          this.type = 4;
           break;
         case 5:
-          this.type = "minyao";
+          this.type = 5;
           break;
         case 6:
-          this.type = "dianzi";
+          this.type = 6;
           break;
       }
       request({
@@ -106,10 +113,15 @@ export default {
     carousel,
     centerNav,
     musicDire,
-    music
+    music,
+    findList
   }
 };
 </script>
 
 <style scoped>
+.music{
+  width: 80%;
+  margin: auto;
+}
 </style>

@@ -3,7 +3,7 @@
     <div class="block">
       <el-carousel height="300px">
         <el-carousel-item v-for="(img,index) in carousel" :key="index">
-          <img v-bind:src="img" />
+          <img v-bind:src="img.src" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -34,6 +34,13 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (min-width: 500px){
+  .carousel{
+  width: 80%;
+  margin:auto
+}
+}
+
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;

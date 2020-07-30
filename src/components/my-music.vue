@@ -1,7 +1,12 @@
 <template>
     <div id="my-music">
         <musicDire></musicDire>
-        <music :mes="music"></music>
+        <music :mes="music">
+            <!-- <template slot-scope="add">
+                <i class="el-icon-plus" @click="add(item)"/>
+            </template>
+             -->
+        </music>
     </div>
 </template>
 
@@ -33,7 +38,7 @@ export default {
 
     },
     methods: {
-
+       
     },
     components: {
         musicDire,

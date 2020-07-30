@@ -110,7 +110,7 @@ export default {
   },
   components: {},
   beforeDestroy() {
-    this.$root.Bus.$off("selectMusic");
+    
   }
 };
 </script>

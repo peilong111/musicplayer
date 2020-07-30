@@ -4,7 +4,7 @@
       <titleDire></titleDire>
     </div>
     <div class="Dynamic">
-      <Dynamic :mic="Dynamic" :key="timer"></Dynamic>
+      <Dynamic :mic="Dynamic" :key="timer" :headImg="headImgSrc"></Dynamic>
     </div>
     <div class="pertion">
       <pertion :fList="friendList" :key="timer1"></pertion>
@@ -26,11 +26,13 @@ export default {
       Dynamic: [],
       timer: 0,
       timer1: 0,
-      friendList: []
+      friendList: [],
+      headImgSrc:''
     };
   },
   computed: {},
   created() {
+    this.headImgSrc = getCookie('userHeadSrc')
     // 获取分享信息
     request({
           url: "/friend/getShare",

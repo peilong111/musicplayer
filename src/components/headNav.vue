@@ -6,9 +6,8 @@
       <li @click="handleSelect(2,$event)" :class="{'currentSelect':index==2}">我的音乐</li>
       <li @click="handleSelect(3,$event)" :class="{'currentSelect':index==3}">朋友</li>
       <li id="navSearch">
-        <form action="http://192.168.0.102:3000/search">
-          <input placeholder="请输入内容" v-model="searchText" @input="myinput" clearable></input>
-        </form>
+        <input placeholder="请输入内容" v-model="searchText" clearable></input>
+        <i class="el-icon-search searchBtn" @click="search"></i>
       </li>
       <li id="last">
         <img :src="currentUser.headSrc" alt="头像" v-show="isLogin" @click="handleSelect(4,$event)">
@@ -85,8 +84,7 @@ export default {
         this.$emit("selectPage", this.index);
       }
     },
-    myinput() {
-      console.log(this.searchText);
+    search() {
       request({
         url: '/search',
         params: {
@@ -94,7 +92,8 @@ export default {
         }
       }).then(
         res => {
-          console.log(res)
+          // console.log(res.data.data)
+          this.$emit("search", res.data.data);
         }
       ).catch(
         err => {
@@ -110,13 +109,13 @@ export default {
       request({
         url: '/login',
         params: {
-          account: this.loginAccount,
-          password: this.loginPassword
+          account: parseInt(this.loginAccount),
+          password: parseInt(this.loginAccount)
         }
       }).then(
         res => {
           if(res.data.datus == 1){
-            
+            // console.log(res.data.data)
             
             this.isLogin = true
             this.currentUser = res.data.data
@@ -138,20 +137,26 @@ export default {
     regist(){
       this.dialogRegistVisible = false
       // 网络请求，验证用户信息
-      console.log(this.registAccount,this.registPassword)
+      // console.log(this.registAccount,this.registPassword)
       request({
         url: '/regist',
         params: {
-          account: this.registAccount,
-          password: this.registPassword
+          account: parseInt(this.registAccount),
+          password: parseInt(this.registPassword)
         }
       }).then(
         res => {
-          this.isLogin = true
-          this.currentUser = res.data.data
-            // this.headSrc = res.data.data.headSrc
-          setCookie('userHeadSrc',res.data.data.headSrc,7)
-          setCookie('userId',res.data.data.id,7)
+          if(res.data.datus == 1){
+            this.isLogin = true
+            this.currentUser = res.data.data
+            console.log(res.data.data)
+              // this.headSrc = res.data.data.headSrc
+            setCookie('userHeadSrc',res.data.data.headSrc,7)
+            setCookie('userId',res.data.data.id,7)
+            sessionStorage.setItem("userMmes",JSON.stringify(res.data.data))
+          }else{
+            window.alert(res.data.mes)
+          }
         }
       ).catch(
         err => {
@@ -202,13 +207,25 @@ li img{
   height: 100%;
   width: 100%;
 }
-#navSearch form input{
+#navSearch form{
   height: 30px;
   width: 100%;
-  border: aqua 1px solid;
+  margin-top: 10px;
   border-radius: 8px;
   background-color: azure;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+input{
+  height: 30px;
+  width: 70%;
   box-sizing: border-box;
+}
+.searchBtn{
+  height: 30px;
+  font-size: 20px;
+
 }
 #last img{
   height: 50px;

@@ -4,14 +4,28 @@
       <span>全部歌单</span>
       <button id="new" @click="newList">新建</button>
     </div>
-    <ul>
+    <ul :key="timer">
       <li>全部歌单</li>
-      <li v-for="(item,index) in list" @click="selectSingList(item,index, $event)">{{item.name}}</li>
+      <li v-for="(item,index) in list" id="listMes">
+        <el-row :gutter="10">
+          <el-col :xs="15" :sm="18" :md="18" :lg="18" :xl="18">
+            <div @click="selectSingList(item,index, $event)">{{item.name}}</div>
+          </el-col>
+          <el-col :xs="9" :sm="6" :md="6" :lg="6" :xl="6">
+            <div @click="deletList(item)">
+              <i class="el-icon-delete"></i>
+            </div>
+          </el-col>
+        </el-row>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { getCookie } from "../assets/js/cookie";
+import { request } from "../request/http";
+
 export default {
   name: "mynav",
   props: {
@@ -22,7 +36,8 @@ export default {
   data() {
     return {
       list: this.lis,
-      currentList: -1
+      currentList: -1,
+      timer: 0
     };
   },
   computed: {},
@@ -52,6 +67,44 @@ export default {
             message: "取消输入"
           });
         });
+    },
+    deletList(item) {
+      this.$confirm("此操作将永久删除该歌单, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          // 删除歌单
+          request({
+            url: "/my/deletList",
+            params: {
+              userId: getCookie("userId"),
+              listId: item.id
+            }
+          })
+            .then(res => {
+              if (res.data.datus == 1) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.timer = new Date().getTime()
+              }
+            })
+            .catch(err => {
+              this.$message({
+                type: "info",
+                message: "删除失败"
+              });
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   },
   components: {}
@@ -66,7 +119,7 @@ export default {
 .mynav ul {
   width: 100%;
 }
-.all{
+.all {
   width: 100%;
   /* height: 50px;
   line-height: 50px; */
@@ -89,12 +142,16 @@ li {
   list-style: none;
   background-color: burlywood;
   margin-top: 2px;
-  overflow: hidden;;
+  overflow: hidden;
 }
-ul li:nth-of-type(odd){ background:#a0d2df;}/*奇数行 */
-ul li:nth-of-type(even){ background:#ddd7c1;}/*偶数行 */
-ul li:hover{
+ul li:nth-of-type(odd) {
+  background: #a0d2df;
+} /*奇数行 */
+ul li:nth-of-type(even) {
+  background: #ddd7c1;
+} /*偶数行 */
+ul li:hover {
   background: rgb(130, 145, 173);
-  cursor: default
+  cursor: default;
 }
 </style>

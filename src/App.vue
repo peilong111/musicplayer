@@ -1,14 +1,17 @@
 <template>
   <div id="app">
     <div class="headerNav">
-      <headNav @selectPage="changePage" @login="login" @unLogin="unLogin"></headNav>
+      <headNav @selectPage="changePage" @login="login" @unLogin="unLogin" @search="search"></headNav>
     </div>
-    <div class="centerContain">
+    <!-- <div class="centerContain">
       <find v-if="pageIndex===1"></find>
       <my v-if="pageIndex===2 && isLogin" :lis="list"></my>
       <friend v-if="pageIndex===3 && isLogin"></friend>
       <message v-if="pageIndex===4 && isLogin"></message>
       <unLogin v-if="pageIndex!=1 && !isLogin"></unLogin>
+    </div>-->
+    <div class="centerContain">
+      <router-view></router-view>
     </div>
     <div class="foot">
       <foot></foot>
@@ -35,33 +38,36 @@ export default {
       this.isLogin = true;
       // 个人歌单列表
       request({
-          url: "/my/getMyMusicList",
-          params: {
-              id: getCookie('userId')
+        url: "/my/getMyMusicList",
+        params: {
+          id: getCookie("userId")
+        }
+      })
+        .then(res => {
+          if (res.data.datus == 1) {
+            this.list = res.data.data;
+            sessionStorage.setItem("userMusicList", JSON.stringify(this.list));
           }
-        }).then(res => {
-            if (res.data.datus == 1) {
-              this.list = res.data.data;
-              sessionStorage.setItem("userMusicList",JSON.stringify(this.list))
-            }
-          }).catch(err => {
-            console.log(err);
-          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
       // 请求用户信息
       request({
-          url: "/getUserMes",
-          params: {
-              userId: getCookie('userId')
+        url: "/getUserMes",
+        params: {
+          userId: getCookie("userId")
+        }
+      })
+        .then(res => {
+          if (res.data.datus == 1) {
+            sessionStorage.setItem("userMmes", JSON.stringify(res.data.data));
           }
-        }).then(res => {
-            if (res.data.datus == 1) {
-              sessionStorage.setItem("userMmes",JSON.stringify(res.data.data))
-            }
-          }).catch(err => {
-            console.log(err);
-          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
-     
   },
   components: {
     headNav: headNav,
@@ -77,7 +83,7 @@ export default {
       pageIndex: 1,
       isLogin: false,
       musicList: [],
-      list:[],
+      list: [],
       // 中转站
       Bus: new Vue({})
     };
@@ -85,26 +91,56 @@ export default {
   methods: {
     changePage(pageIndex) {
       if (pageIndex > 0 && pageIndex < 5) this.pageIndex = pageIndex;
+      switch (this.pageIndex) {
+        case 1:
+          this.$router.replace("/");
+          break;
+        case 2:
+          if (this.isLogin)
+            this.$router.replace({ path: "/my", query: { list: this.list } })
+            else this.$router.replace("/unLogin")
+          break;
+        case 3:
+          if (this.isLogin) this.$router.replace("/friend")
+          else this.$router.replace("/unLogin")
+          break;
+        case 4:
+          if (this.isLogin) this.$router.replace("/message")
+          else this.$router.replace("/unLogin")
+          break;
+        default:
+          if (!this.isLogin) this.$router.replace("/");
+      }
     },
     login(isLogin) {
       this.isLogin = isLogin;
+
       request({
-          url: "/my/getMyMusicList",
-          params: {
-              id: getCookie('userId')
+        url: "/my/getMyMusicList",
+        params: {
+          id: getCookie("userId")
+        }
+      })
+        .then(res => {
+          if (res.data.datus == 1) {
+            this.list = res.data.data;
+            sessionStorage.setItem("userMusicList", JSON.stringify(this.list));
+            this.changePage(this.pageIndex)
           }
-        }).then(res => {
-            if (res.data.datus == 1) {
-              this.list = res.data.data;
-              sessionStorage.setItem("userMusicList",JSON.stringify(this.list))
-            }
-          }).catch(err => {
-            console.log(err);
-          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    
     },
     unLogin() {
       this.isLogin = false;
-      
+    },
+    search(result) {
+      this.$router.replace({
+        path: "/search",
+        query: { searchResult: result }
+      });
     }
   }
 };

@@ -19,9 +19,14 @@
               v-show="!isPLay||!(item.id===playId)"
             />
             <i class="el-icon-download" @click="save(item)" />
-            <i class="el-icon-plus" @click="add(item)" />
+            <i class="el-icon-plus" @click="add(item)"/>
+            <!-- <i><slot name="add"></slot></i> -->
+            
           </el-col>
         </el-row>
+      </li>
+      <li id="more">
+        <el-button type="info" plain size="mini" @click="more" v-if="showMore">点击加载更多</el-button>
       </li>
     </ul>
     <el-dialog title="选择歌单" :visible.sync="dialogTableVisible">
@@ -50,16 +55,27 @@ export default {
   },
   data() {
     return {
+      allmusic: this.mes,
       music: this.mes,
       playId: 9999999,
       isPLay: false,
       dialogTableVisible: false,
       listMes: [],
-      addMusicId: 0
+      addMusicId: 0,
+      listNum: 10,
+      showMore: true
     };
   },
   computed: {},
-  created() {},
+  created() {
+    // console.log(this.allmusic.length)
+    if (this.allmusic.length > 10) {
+      this.music = this.music.slice(0, this.listNum);
+    } else {
+      this.music = this.allmusic;
+      this.showMore = false;
+    }
+  },
   mounted() {},
   watch: {},
   methods: {
@@ -107,29 +123,22 @@ export default {
         });
       this.dialogTableVisible = false;
     },
-    save(item) {
-      
+    save(item) {},
+    more(e) {
+      let leng = this.allmusic.length;
+      // console.log(e.which);
+      if (this.listNum + 10 > leng) {
+        this.$message("全部加载完啦");
+        this.listNum = leng;
+        this.showMore = false;
+      } else {
+        this.listNum += 10;
+      }
+      this.music = this.allmusic.slice(0, this.listNum);
+    },
+    delet(item) {
+      console.log("item");
     }
-  
-      // downloadMp3 = filePath => {
-      //   fetch(filePath)
-      //     .then(res => res.blob())
-      //     .then(blob => {
-      //       const a = document.createElement("a");
-      //       document.body.appendChild(a);
-      //       a.style.display = "none";
-      //       // 使用获取到的blob对象创建的url
-      //       const url = window.URL.createObjectURL(blob);
-      //       a.href = url;
-      //       // 指定下载的文件名
-      //       a.download = "语音音频.mp3";
-      //       a.click();
-      //       document.body.removeChild(a);
-      //       // 移除blob对象的url
-      //       window.URL.revokeObjectURL(url);
-      //     });
-      // };
-    
   },
   components: {}
 };
@@ -138,6 +147,7 @@ export default {
 <style scoped>
 .music {
   padding-bottom: 70px;
+  width: 100%;
 }
 .el-row {
   height: 40px;
@@ -175,7 +185,12 @@ span {
 
 i {
   /* background: rgb(200, 200, 202); */
+  text-align: center;
   height: 90%;
-  width: 30%;
+  width: 25%;
+}
+#more {
+  background: rgb(246, 250, 250);
+  text-align: center;
 }
 </style>

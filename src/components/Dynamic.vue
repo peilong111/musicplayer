@@ -2,7 +2,7 @@
   <div id="Dynamic">
     <div id="sharecontain" v-for="item in Dynamic">
       <div class="top">
-        <img :src="item.headImg" alt="头像" id="headImg" />
+        <img :src="headImgSrc" alt="头像" id="headImg" />
         <p id="name">{{item.name}}</p>
         <p id="time">发表时间：{{item.time}}</p>
       </div>
@@ -28,38 +28,28 @@
           </el-col>
         </el-row>
 
-        <!-- <el-badge :value="item.good" :max="99" class="item" :hidden="true">
-          <i class="el-icon-thumb" @click="clickgood(item)">点赞({{item.good}})</i>
-        </el-badge>
-        <el-badge :value="item.send" :max="99" class="item" :hidden="true">
-          <i class="el-icon-share" @click="clicksend(item)">转发({{item.send}})</i>
-        </el-badge>
-        <el-badge :value="item.comment" :max="99" class="item" :hidden="true">
-          <i class="el-icon-comment" @click="clickcomment(item)">评论({{item.comment}})</i>
-        </el-badge>-->
       </div>
     </div>
 
-    <!-- <share v-for="item in Dynamic" :list="item"
-    @update-good="updategood"
-    @update-send="updatesend"
-    @update-comment="updatecomment">
-    </share>-->
+    
   </div>
 </template>
 
 <script>
-// import share from "./share";
 
 export default {
   props: {
     mic: {
       type: Array
+    },
+    headImg:{
+      type: String
     }
   },
   data() {
     return {
-      Dynamic: this.mic
+      Dynamic: this.mic,
+      headImgSrc: this.headImg
     };
   },
   computed: {},
@@ -69,15 +59,14 @@ export default {
   methods: {
     clickgood(item) {
       item.good++;
-      // console.log(item.id)
     },
     clicksend(item) {
       item.send++;
-      // this.$emit('update-send', this.mesg.send,this.mesg.id);
+
     },
     clickcomment(item) {
       item.comment++;
-      // this.$emit('update-comment', this.mesg.comment,this.mesg.id);
+      
     }
   },
   components: {
@@ -90,7 +79,7 @@ export default {
 #Dynamic {
   height: 100%;
   width: 100%;
-  background-color: rgb(241, 220, 241);
+  background-color: rgb(245, 243, 245);
 }
 
 #sharecontain {

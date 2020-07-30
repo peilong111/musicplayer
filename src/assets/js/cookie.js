@@ -25,7 +25,7 @@ function getCookie(c_name){
             if (c_end==-1){ 
                 c_end=document.cookie.length;
             }
-
+            // unescape解密
             return unescape(document.cookie.substring(c_start,c_end));
         }
      }
