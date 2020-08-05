@@ -112,6 +112,8 @@ export default {
               type: "success"
             });
             this.$root.$emit("addMusic");
+            // console.log(location.href)
+            // location.reload(location.href)
           }
         })
         .catch(err => {
