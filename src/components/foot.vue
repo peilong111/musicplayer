@@ -26,7 +26,8 @@
         <span id="singer">{{music.singer}}</span>
       </p>
       <div class="progre">
-        <div id="progreLeft"><el-slider v-model="value" :format-tooltip="formatTooltip" :show-tooltip="false"></el-slider></div>
+        <div id="progreLeft"><el-slider v-model="value" :format-tooltip="formatTooltip" :show-tooltip="false" 
+        @change="changeValue" show-tooltip="true"></el-slider></div>
         <div id="progreRight">{{currenttime}}/{{musicTime}}</div>
       </div>
     </div>
@@ -107,9 +108,10 @@ export default {
     },
     // 音频播放结束
     playend() {
-      this.percentage = 100;
-      this.isplay = false;
-      this.$refs.audio.pause();
+      // this.percentage = 100;
+      // this.isplay = false;
+      // this.$refs.audio.pause();
+      this.next()
     },
 
     formatTooltip(val) {},
@@ -146,6 +148,10 @@ export default {
       this.$refs.audio.setAttribute("autoplay", "autoplay");
       this.$refs.audio.play();
       this.$store.commit('next')
+    },
+    changeValue(value){
+      let musictime = parseInt(this.$refs.audio.duration);
+      this.$refs.audio.currentTime = (value/100)*musictime
     }
   },
   components: {},
