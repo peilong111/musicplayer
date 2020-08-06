@@ -8,6 +8,8 @@ import Router from 'vue-router'
 // import unLogin from "../components/unLogin"
 // import error from "../common/error"
 // import searchResult from "../common/searchResult"
+
+// 按需加载优化
 const find = ()=>import('../common/find.vue')//会动态加载组件
 const my = ()=>import('../common/my')
 const friend = ()=>import('../common/friend')
@@ -15,6 +17,7 @@ const message = ()=>import('../common/message.vue')
 const unLogin = ()=>import('../components/unLogin')
 const error = ()=>import('../common/error.vue')
 const searchResult = ()=>import('../common/searchResult.vue')
+const list = ()=>import('../common/list.vue')
 
 Vue.use(Router)
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -37,38 +40,37 @@ export default new Router({
          },
         {
             path: '/',
-            name: 'mes',
             component: find,
             meta: {allowBack: false} 
         },
         {
             path: '/my',
-            name: 'mes',
             component: my,
              meta: {allowBack: false} 
         },
         {
             path: '/friend',
-            name: 'mes',
             component: friend,
             meta: {allowBack: false} 
         },
         {
             path: '/message',
-            name: 'mes',
             component: message,
             meta: {allowBack: false} 
         },
         {
             path: '/unLogin',
-            name: 'mes',
             component: unLogin,
             meta: {allowBack: false} 
         },
         {
             path: '/search',
-            name: 'mes',
             component: searchResult
+        },
+        {
+            path: '/list:id',
+            component: list,
+            meta: {allowBack: false} 
         }
     ]
 })

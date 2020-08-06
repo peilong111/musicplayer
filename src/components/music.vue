@@ -15,7 +15,7 @@
             <i class="el-icon-video-pause" @click="selectMusic(item)" v-show="(item.id===playId)" />
             <i
               class="el-icon-video-play"
-              @click="selectMusic(item)"
+              @click="selectMusic(item,index)"
               v-show="!isPLay||!(item.id===playId)"
             />
             <i class="el-icon-download" @click="save(item)" />
@@ -68,7 +68,8 @@ export default {
   },
   computed: {},
   created() {
-    // console.log(this.allmusic.length)
+    // console.log('2020')
+    // console.log(this.allmusic)
     if (this.allmusic.length > 10) {
       this.music = this.music.slice(0, this.listNum);
     } else {
@@ -79,7 +80,9 @@ export default {
   mounted() {},
   watch: {},
   methods: {
-    selectMusic(music) {
+    selectMusic(music,index) {
+      // console.log(index)
+      this.$store.commit('selectMusic',{musicList:this.music,index:index})
       if (music.id == this.playId) {
         this.isPLay = false;
         this.playId = 9999999;

@@ -3,7 +3,7 @@
     <div class="top">推荐歌单</div>
     <el-row :gutter="10">
       <el-col :xs="12" :sm="6" v-for="item in listMes">
-        <div class="contain">
+        <div class="contain" @click="selectList(item)">
           <div class="containImg">
             <img :src="item.musicImg" alt="歌单图片" />
           </div>
@@ -44,7 +44,17 @@ export default {
   },
   mounted() {},
   watch: {},
-  methods: {},
+  methods: {
+    selectList(item){
+      
+      // console.log(item.id)
+      this.$router.push({
+        
+        path: '/list'+item.id,
+        query:{musicList: item}
+      })
+    }
+  },
   components: {}
 };
 </script>

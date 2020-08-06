@@ -11,7 +11,9 @@
       <unLogin v-if="pageIndex!=1 && !isLogin"></unLogin>
     </div>-->
     <div class="centerContain">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
     <div class="foot">
       <foot></foot>
@@ -21,12 +23,12 @@
 
 <script>
 import headNav from "./components/headNav";
-import find from "./common/find";
-import my from "./common/my";
-import friend from "./common/friend";
-import message from "./common/message";
+// import find from "./common/find";
+// import my from "./common/my";
+// import friend from "./common/friend";
+// import message from "./common/message";
 import foot from "./components/foot";
-import unLogin from "./components/unLogin";
+// import unLogin from "./components/unLogin";
 import Vue from "vue";
 import { setCookie, getCookie, checkCookie } from "./assets/js/cookie";
 import { request } from "./request/http";
@@ -71,12 +73,12 @@ export default {
   },
   components: {
     headNav: headNav,
-    find,
-    my,
-    friend,
+    // find,
+    // my,
+    // friend,
     foot,
-    message,
-    unLogin
+    // message,
+    // unLogin
   },
   data() {
     return {

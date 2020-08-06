@@ -2,14 +2,14 @@
   <div id="audio" ref="all">
     <!-- 通过this.$refs.audio获取相关属性 -->
     <audio
-      :src="musicSrc"
+      :src="music.src"
       ref="audio"
       @ended="playend"
       @canplay="setTime"
       @timeupdate="updateCurrenttime"
     ></audio>
     <div class="left">
-      <el-button type="info" icon="el-icon-caret-left" size="mini"></el-button>
+      <el-button type="info" icon="el-icon-caret-left" size="mini" @click="last"></el-button>
       <el-button type="info" icon="el-icon-video-play" v-show="!isplay" @click="play" size="medium"></el-button>
       <el-button
         type="info"
@@ -18,12 +18,12 @@
         @click="pause"
         size="medium"
       ></el-button>
-      <el-button type="info" icon="el-icon-caret-right" size="mini"></el-button>
+      <el-button type="info" icon="el-icon-caret-right" size="mini" @click="next"></el-button>
     </div>
     <div class="right">
       <p>
-        <span>{{musicName}}</span>
-        <span id="singer">{{singer}}</span>
+        <span>{{music.name}}</span>
+        <span id="singer">{{music.singer}}</span>
       </p>
       <div class="progre">
         <div id="progreLeft"><el-slider v-model="value" :format-tooltip="formatTooltip" :show-tooltip="false"></el-slider></div>
@@ -42,13 +42,14 @@ export default {
   },
   data() {
     return {
-      musicSrc: "",
-      musicName: "",
+      music:{},
+      currentIndex:0,
+      // musicName: "",
       percentage: 0,
       isplay: false,
       currenttime: "0:0",
       musicTime: "",
-      singer: "",
+      // singer: "",
       value: 0,
       isplayId:0
     };
@@ -58,10 +59,12 @@ export default {
     this.$root.$on("selectMusic", (music,isPLay) => {
       // console.log("得到选择的音乐：", music);
       if(isPLay){
+        this.music = music
         this.isplayId = music.id
-        this.musicSrc = music.src;
-        this.musicName = music.name;
-        this.singer = music.singer;
+
+        // this.musicSrc = music.src;
+        // this.musicName = music.name;
+        // this.singer = music.singer;
         this.isplay = true;
         this.$refs.audio.setAttribute("autoplay", "autoplay");
         this.$refs.audio.play();
@@ -69,9 +72,14 @@ export default {
         this.isplay = false;
         this.$refs.audio.pause();
       }
+      
     });
+
+    
   },
-  mounted() {},
+  mounted() {
+    
+  },
   watch: {},
   methods: {
     // 播放按钮
@@ -104,8 +112,40 @@ export default {
       this.$refs.audio.pause();
     },
 
-    formatTooltip(val) {
-      
+    formatTooltip(val) {},
+    last(){
+      // console.log(this.$store.state.currentPlayIndex)
+      let curretnIndex = this.$store.state.currentPlayIndex
+      if(curretnIndex==0) return
+      let currentMusic = this.$store.state.musicList[curretnIndex-1]
+      // console.log(currentMusic)
+      this.music = currentMusic
+      this.isplayId = currentMusic.id
+
+        // this.musicSrc = music.src;
+        // this.musicName = music.name;
+        // this.singer = music.singer;
+      this.isplay = true;
+      this.$refs.audio.setAttribute("autoplay", "autoplay");
+      this.$refs.audio.play();
+      this.$store.commit('last')
+    },
+    next(){
+      let curretnIndex = this.$store.state.currentPlayIndex
+      // console.log(curretnIndex+1)
+      if( curretnIndex+1 == this.$store.state.musicList.length) return
+      let currentMusic = this.$store.state.musicList[curretnIndex+1]
+      // console.log(currentMusic)
+      this.music = currentMusic
+      this.isplayId = currentMusic.id
+
+        // this.musicSrc = music.src;
+        // this.musicName = music.name;
+        // this.singer = music.singer;
+      this.isplay = true;
+      this.$refs.audio.setAttribute("autoplay", "autoplay");
+      this.$refs.audio.play();
+      this.$store.commit('next')
     }
   },
   components: {},
